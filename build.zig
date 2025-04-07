@@ -21,7 +21,7 @@ const PatchHeaderStep = struct {
         return patch_header;
     }
 
-    pub fn make(step: *std.Build.Step, node: *std.Progress.Node) anyerror!void {
+    pub fn make(step: *std.Build.Step, node: std.Build.Step.MakeOptions) anyerror!void {
         _ = node;
         const self: *PatchHeaderStep = @fieldParentPtr("step", step);
         const file = try std.fs.openFileAbsolute(step.owner.getInstallPath(.{ .bin = {} }, self.bin_path), .{ .mode = .write_only });
@@ -59,7 +59,7 @@ pub fn build(b: *std.Build) !void {
 
     // Exe status.
     const exe = b.addExecutable(.{
-        .name = "hello-snes",
+        .name = "taylors-zig-snes-test",
         .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
@@ -88,7 +88,7 @@ pub fn build(b: *std.Build) !void {
         .map_mode = .{ .ex_hi_rom = false, .mapping_model = .HiRom, .speed = .Slow },
         .ram_size = 0,
         .rom_size = 8,
-        .title = "ZIG SNES DEMO",
+        .title = "TAYLOR ZIG SNES TEST",
         .version = 0,
     };
     const header_step = PatchHeaderStep.create(b, bin.dest_rel_path, header);

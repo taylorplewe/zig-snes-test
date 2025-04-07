@@ -1,6 +1,0 @@
-image: gota7/zig-build-snes:0.1
-aliases:
-  build:
-    script:
-      - zig build --release=small
-      - llvm-objdump zig-out/bin/hello-snes --disassemble
