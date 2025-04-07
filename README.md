@@ -1,7 +1,7 @@
 # Taylor's `zig-snes` Test
 It would be nice to get this working without needing Docker. You just need to install `zig-mos` in order to build for 6502-based targets.
 
-This was the contents of the Dockerfile in the original `zig-snes`:
+This was the contents of the `Dockerfile` in the original `zig-snes`:
 ```dockerfile
 FROM debian:bookworm
 
@@ -23,4 +23,14 @@ RUN wget https://github.com/kassane/zig-mos-bootstrap/releases/download/0.1/zig-
 RUN wget https://github.com/llvm-mos/llvm-mos-sdk/releases/latest/download/llvm-mos-linux.tar.xz \
     && tar -xf llvm-mos-linux.tar.xz \
     && rm llvm-mos-linux.tar.xz
+```
+
+and the `.scuba.yml`:
+```yml
+image: gota7/zig-build-snes:0.1
+aliases:
+  build:
+    script:
+      - zig build --release=small
+      - llvm-objdump zig-out/bin/hello-snes --disassemble
 ```
