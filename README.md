@@ -1,11 +1,26 @@
-# Zig SNES
-Template for using zig on the SNES with batteries included.
-This uses [llvm-mos-bootstrap](https://github.com/kassane/zig-mos-bootstrap) to accomplish this.
+# Taylor's `zig-snes` Test
+It would be nice to get this working without needing Docker. You just need to install `zig-mos` in order to build for 6502-based targets.
 
-## NOTE
-This is very very WIP! Don't expect any stability!
+This was the contents of the Dockerfile in the original `zig-snes`:
+```dockerfile
+FROM debian:bookworm
 
-## Building
-All you need is to have Docker and [scuba](https://github.com/JonathonReinhart/scuba) installed.
-After this, run `scuba build`, and an ELF and ROM will be output in the `zig-out/bin` folder.
-If `scuba build` results in an `AccessDenied` error, ensure your folder is set to recursively allow other users to modify content.
+ENV PATH="$PATH:/zig:/llvm-mos/bin"
+
+# Install packages.
+RUN apt-get update && apt-get install -y \
+    wget \
+    xz-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install zig-mos.
+RUN wget https://github.com/kassane/zig-mos-bootstrap/releases/download/0.1/zig-mos-x86_64-linux-musl-baseline.tar.xz \
+    && tar -xf zig-mos-x86_64-linux-musl-baseline.tar.xz \
+    && mv zig-mos-x86_64-linux-musl-baseline zig \
+    && rm zig-mos-x86_64-linux-musl-baseline.tar.xz
+
+# Install llvm-mos.
+RUN wget https://github.com/llvm-mos/llvm-mos-sdk/releases/latest/download/llvm-mos-linux.tar.xz \
+    && tar -xf llvm-mos-linux.tar.xz \
+    && rm llvm-mos-linux.tar.xz
+```
